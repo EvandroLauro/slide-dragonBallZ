@@ -1,0 +1,318 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="utf-8">
+        <TITLE>Dragon Ball Z</TITLE>
+        
+        <style>
+            /* Estilização da div*/
+            #slide{
+                border: 1px solid black;
+                width: 1000px;
+                height: 300px;
+                margin-left:170px;
+            }
+
+            #bola{
+                width: 100px;
+                height: 20px;
+                margin-top: -25px;
+                margin-left: 625px;
+            }
+
+            #bola1{
+                position:absolute;
+            }
+
+            #bola2{
+                position:absolute;
+            }
+
+            #bola3{
+                position:absolute;
+            }
+
+            .bolinhas{
+                width: 15px;
+                height: 15px;
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+                border-bottom-right-radius: 10px;
+                border-bottom-left-radius: 10px;
+                border: solid 1px black;
+            }
+
+            .quadradoBolinha{
+                width: 15px;
+                height: 15px;
+                margin-left: 10px;
+                margin-top: 1.2px;
+                display: inline-block;
+            }
+        </style>
+    </head>
+
+        <script>
+            var tempoTrocaTextEsquerdo = 0;
+            var tempoTrocaTextDireito = 0;
+            var tempoTrocaImg = 0;
+            var ligandoPause = 0;
+
+            const esquerdoId = "esquerdo";                                                   
+            const direitoId = "direito";                                                     
+            const esquerdoCssLeft = "left";                                                 
+            const direitoCssRight = "right";
+
+            var tempoMexeBolinhaPrimeiro = 0;
+            var tempoMexeBolinhaSegunda = 0;
+            var tempoMexeBolinhaTerceiro = 0;      
+            var incrementaControlaPosition = 1;
+            var positionAnimationDaBolinha = 1; 
+            const menos = "-";
+
+            var cont = 1; /////////////////////////////////////////////////////////////////////// *Lista numero de imgs e controla qual
+            function listandoImg(){                                                            // img vai aparecer no slide
+                getImgText(cont);                                                              //    
+                if(cont == 3){                                                                 //
+                    cont=1;                                                                    //
+                }else{                                                                         //      
+                    ++cont;                                                                    //
+                }                                                                              //
+            }////////////////////////////////////////////////////////////////////////////////////
+
+            function getImgText(cont){ ////////////////////////////////////////////////////////// *Inicia a troca da img e do text
+                let slide=document.getElementById("slide");                                    // que vai aparecer no slide
+                slide.style.backgroundImage="url(foto"+cont+".png)";                           //
+                if(cont == 1){                            // Textos da primeira img            //
+                    let esquerdo = "Com a minha mente";                                        //
+                    let direito = "vou a mil lugares";                                         //
+                    let cor = "#d93e4b";                                                       //
+                    executeSlide(esquerdo, cor, esquerdoId, esquerdoCssLeft);                  //
+                    executeSlide(direito, cor, direitoId, direitoCssRight);                    //
+                }else if(cont == 2){                   // Textos da segunda img                //
+                    let esquerdo = "E a imaginação";                                           //
+                    let direito = "me dá forças para voar";                                    //
+                    let cor = "#1d2027";                                                       //
+                    executeSlide(esquerdo, cor, esquerdoId, esquerdoCssLeft);                  //
+                    executeSlide(direito, cor, direitoId, direitoCssRight);                    //   
+                }else if(cont == 3){                   // Textos da terceira img               //
+                    let esquerdo = " Meu compromisso";                                         // 
+                    let direito = "é sempre vencer!";                                          //
+                    let cor = "#514d7e";                                                       //
+                    executeSlide(esquerdo, cor, esquerdoId, esquerdoCssLeft);                  //  
+                    executeSlide(direito, cor, direitoId, direitoCssRight);                    //
+                }                                                                              //
+                styleBordaBolinha(cont);                                                       //      
+            }                                                                                  //
+                                                                                               //
+            function executeSlide(texto, cor, idNome, cssFloat){  // Cria o bloco   que vai    //
+                let criandoTag = document.createElement("h1");    // ir o text e estiliza      //
+                criandoTag.setAttribute("id", idNome);                                         //
+                document.getElementById("slide").appendChild(criandoTag);                      //
+                let obj = document.getElementById(idNome);                                     //
+                obj.style.position = "relative";                                               //
+                obj.style.cssFloat = cssFloat;                                                 //
+                obj.style.marginTop = "130px";                                                 //
+                obj.style.color = cor;                                                         //
+                obj.innerHTML = texto;                                                         //
+                tempoTrocaTextEsquerdo = 0;                                                    //     
+                tempoTrocaTextDireito = 0;                                                     //
+            }////////////////////////////////////////////////////////////////////////////////////
+            
+                        ////////////////////////////////////////////////////////////////////////// *Codigo responsavel
+            function executaSlide(){                                                            // por determinar o tempo que
+                if(ligandoPause == 0){                                                          // uma foto é trocada por outra.
+                                                                                                //                                                                 
+                    tempoTrocaImg++;                                                            // *Vc pode tambem alterar 400
+                    if(tempoTrocaImg >= 400){                                                   // para mudar esse tempo
+                        tempoTrocaImg = 0;                                                      //
+                        document.getElementById("esquerdo").remove();                           //
+                        document.getElementById("direito").remove();                            //
+                        positionAnimationDaBolinha = 1;                                         //
+                        animandoBolinha();                                                      //
+                        listandoImg();                                                          //                    
+                    }                                                                           //
+                    window.requestAnimationFrame(executaSlide);                                 //                                                                   
+                }else if(ligandoPause == 1){                                                    //
+                    window.cancelAnimationFrame(executaSlide);// Pause slide                    //
+                }                                                                               //
+            }                                                                                   //
+            //////////////////////////////////////////////////////////////////////////////////////
+
+            function moveTextEsquerdo(){////////////////////////////////////////////////////////// Controla a movimentação do 
+                if(ligandoPause == 0){                                                          // texto que aparece na img
+                    tempoTrocaTextEsquerdo++;                                                   //
+                    if(tempoTrocaTextEsquerdo >=100){                                           //
+                        tempoTrocaTextEsquerdo = 100;                                           //
+                    }                                                                           //
+                    let obj = document.getElementById("esquerdo");                              //
+                    obj.style.marginLeft = tempoTrocaTextEsquerdo + "px";                       //
+                    window.requestAnimationFrame(moveTextEsquerdo);                             //
+                }else if(ligandoPause == 1){                                                    //
+                    window.cancelAnimationFrame(moveTextEsquerdo);                              //
+                }                                                                               //
+            }                                                                                   //
+                                                                                                //
+            function moveTextDireito(){                                                         //
+                if(ligandoPause == 0){                                                          //
+                    tempoTrocaTextDireito++;                                                    //
+                    if(tempoTrocaTextDireito >= 100){                                           //
+                        tempoTrocaTextDireito = 100;                                            //
+                    }                                                                           //
+                    let obj = document.getElementById("direito");                               //
+                    obj.style.marginRight = tempoTrocaTextDireito + "px";                       //
+                    window.requestAnimationFrame(moveTextDireito);                              //
+                }else if(ligandoPause == 1){                                                    //
+                    window.cancelAnimationFrame(moveTextDireito);                               //
+                }                                                                               //
+            }/////////////////////////////////////////////////////////////////////////////////////
+                                       
+            function controlaPosition(){ ///////////////////////////////////////////////////////// Animando a bolinha
+                if(incrementaControlaPosition <= 5){                                            //
+                    incrementaControlaPosition++;                                               //
+                }else{                                                                          //
+                    positionAnimationDaBolinha++;                                               //
+                    incrementaControlaPosition = 1;                                             //
+                }                                                                               //
+            }                                                                                   //
+                                                                                                //
+            function animandoBolinha(){                                                         //
+                if(positionAnimationDaBolinha == 1){                                            //
+                    tempoMexeBolinhaPrimeiro++;                                                 //
+                    let primeiraBola = document.getElementById("bola1");                        //
+                    primeiraBola.style.marginTop = menos + tempoMexeBolinhaPrimeiro + "px";     //
+                    controlaPosition();                                                         //
+                }else if(positionAnimationDaBolinha == 2){                                      //
+                    tempoMexeBolinhaPrimeiro++;                                                 //
+                    tempoMexeBolinhaSegunda++;                                                  //
+                    let primeiraBola = document.getElementById("bola1");                        //
+                    primeiraBola.style.marginTop = menos + tempoMexeBolinhaPrimeiro + "px";     //
+                    let segundaBola = document.getElementById("bola2");                         //
+                    segundaBola.style.marginTop = menos + tempoMexeBolinhaSegunda + "px";       //
+                    controlaPosition();                                                         //
+                }else if(positionAnimationDaBolinha == 3){                                      //
+                    tempoMexeBolinhaPrimeiro--;                                                 //
+                    tempoMexeBolinhaSegunda++;                                                  //
+                    tempoMexeBolinhaTerceiro++;                                                 //
+                    let primeiraBola = document.getElementById("bola1");                        //
+                    primeiraBola.style.marginTop = menos + tempoMexeBolinhaPrimeiro + "px";     //
+                    let segundaBola = document.getElementById("bola2");                         //
+                    segundaBola.style.marginTop = menos + tempoMexeBolinhaSegunda + "px";       //
+                    let terceiraBola = document.getElementById("bola3");                        //
+                    terceiraBola.style.marginTop = menos + tempoMexeBolinhaTerceiro + "px";     //
+                    controlaPosition();                                                         //
+                }else if(positionAnimationDaBolinha == 4){                                      //
+                    tempoMexeBolinhaPrimeiro --;                                                //
+                    tempoMexeBolinhaSegunda --;                                                 //
+                    tempoMexeBolinhaTerceiro++;                                                 //
+                    let primeiraBola = document.getElementById("bola1");                        //
+                    primeiraBola.style.marginTop = menos + tempoMexeBolinhaPrimeiro + "px";     //
+                    let segundaBola = document.getElementById("bola2");                         //
+                    segundaBola.style.marginTop = menos + tempoMexeBolinhaSegunda + "px";       //
+                    let terceiraBola = document.getElementById("bola3");                        //
+                    terceiraBola.style.marginTop = menos + tempoMexeBolinhaTerceiro + "px";     //
+                    controlaPosition();                                                         //
+                }else if(positionAnimationDaBolinha == 5){                                      //
+                    tempoMexeBolinhaSegunda --;                                                 //
+                    tempoMexeBolinhaTerceiro --;                                                //
+                    let segundaBola = document.getElementById("bola2");                         //
+                    segundaBola.style.marginTop = menos + tempoMexeBolinhaSegunda + "px";       //
+                    let terceiraBola = document.getElementById("bola3");                        //
+                    terceiraBola.style.marginTop = menos + tempoMexeBolinhaTerceiro + "px";     //
+                    controlaPosition();                                                         //
+                }else if(positionAnimationDaBolinha == 6){                                      //
+                    tempoMexeBolinhaTerceiro --;                                                //
+                    let terceiraBola = document.getElementById("bola3");                        //
+                    terceiraBola.style.marginTop = menos + tempoMexeBolinhaTerceiro + "px";     //
+                    controlaPosition();                                                         //
+                }                                                                               //
+                if( positionAnimationDaBolinha < 7){                                            //
+                    window.requestAnimationFrame(animandoBolinha);                              //
+                }                                                                               //
+            } ////////////////////////////////////////////////////////////////////////////////////
+ 
+            function bolaUm(n){/////////////////////////////////////////////////////////////////// *Troca img do slide
+                executeTrocaManual(n);                                                          // manualmente
+            }                                                                                   //
+                                                                                                //
+            function bolaDois(n){                                                               //
+                executeTrocaManual(n);                                                          //
+            }                                                                                   //
+                                                                                                //
+            function bolaTres(n){                                                               //
+                executeTrocaManual(n);                                                          //
+            }                                                                                   //
+                                                                                                //
+            function executeTrocaManual(n){ // *Executa a troca manualmente e dita              //
+                tempoTrocaImg = 0;          // qual a proxima a img que vai aparecer            //
+                tempoTrocaTextEsquerdo = 0;                                                     //     
+                tempoTrocaTextDireito = 0;                                                      //
+                document.getElementById("esquerdo").remove();                                   //
+                document.getElementById("direito").remove();                                    //
+                document.getElementById("slide").style.backgroundImage = "url(foto"+n+".png)";  // 
+                getImgText(n);                                                                  //
+                if(n < 3){                                                                      //
+                    ++n;                                                                        //
+                    cont = n;                                                                   //
+                }else{                                                                          //
+                    cont = 1;                                                                   //
+                }                                                                               //
+            }                                                                                   //
+                                                                                                //
+           function styleBordaBolinha(cont){                                                    // 
+                let resetStyleBall = document.getElementsByClassName("bolinhas");// *Controla   // 
+                for(var i = 0; i < resetStyleBall.length; i++){                  // o estilo da // 
+                    resetStyleBall[i].style.border = "0px solid";                // bola quando //    
+                }                                                                // troca a     //
+                let bolinha=document.getElementById("bola"+cont);                // img         //
+                bolinha.style.border= "1px solid black"                                         // 
+            }/////////////////////////////////////////////////////////////////////////////////////
+
+            function bolaPointer(){/////////////////////////////////////////////////////////////// *Exibe ponteiro quando passamos o cursor
+                let ponteiro = document.getElementsByClassName("bolinhas");                     // na bolinha que troca a img do slide
+                for(var i = 0; i < ponteiro.length; i++){                                       //
+                    ponteiro[i].style.cursor = "pointer";                                       //
+                }                                                                               //
+            } ////////////////////////////////////////////////////////////////////////////////////
+
+            function pauseSlide(){//////////////////////////////////////////////////////////////// *Pause a img e o text se passar o mouse por cima
+                let slide = document.getElementById("slide");                                   // do slide
+                slide.addEventListener("mouseover", executarPauseSlide);                        // 
+                slide.addEventListener("mouseout", executarPauseSlide);                         //
+            }                                                                                   //
+                                                                                                // 
+            function executarPauseSlide(){                                                      //
+                if(ligandoPause == 0){                                                          //
+                    ligandoPause = 1;                                                           //
+                    return ligandoPause;                                                        //
+                }else if(ligandoPause == 1){                                                    //
+                    ligandoPause = 0;                                                           //
+                    executaSlide();                                                             //
+                    moveTextEsquerdo();                                                         //
+                    moveTextDireito();                                                          //
+                    return ligandoPause;                                                        //
+                }                                                                               //
+            }/////////////////////////////////////////////////////////////////////////////////////
+
+            var ListaDeFuncoes = [executaSlide, pauseSlide, listandoImg, bolaPointer, moveTextEsquerdo, moveTextDireito, animandoBolinha];
+            for(var i = 0; i < ListaDeFuncoes.length; i++){
+                window.addEventListener("load", ListaDeFuncoes[i]);
+            }
+        </script> 
+ 
+    <body>
+        <div id="slide"></div>
+        <div id="bola">
+            <div class="quadradoBolinha">
+                <img id="bola1" onclick="bolaUm(1)" class="bolinhas" src="bola1.png">
+            </div>
+            <div class="quadradoBolinha">
+                <img id="bola2" onclick="bolaDois(2)" class="bolinhas" src="bola2.png">
+            </div>
+            <div class="quadradoBolinha">
+                <img id="bola3" onclick="bolaTres(3)" class="bolinhas" src="bola3.png">
+            </div>
+        <div>
+    </body>
+</html>
